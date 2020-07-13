@@ -1,0 +1,11 @@
+.login-form-wrapper {
+	padding: 30px;
+	width: 600px;
+}
+.login-form__logo {
+	height: 60px;
+	font-size: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
