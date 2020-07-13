@@ -1,9 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import AppLayout from './components/Layout/';
 
-ReactDOM.render(
-	<React.StrictMode>
-		<div>init</div>
-	</React.StrictMode>,
-	document.getElementById('root')
-);
+ReactDOM.render(<AppLayout />, document.getElementById('root'));
