@@ -13,9 +13,9 @@ import IndexPage from '../../pages/IndexPage';
 
 const AppLayout = () => {
 	return (
-		<Layout>
+		<Layout className="app-layout">
 			<Header />
-			<Layout className="app-layout">
+			<Layout>
 				<Sider />
 				<Content>
 					<Route exact path="/" component={IndexPage} />
