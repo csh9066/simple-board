@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Layout } from 'antd';
+import { Layout, Divider } from 'antd';
 import { Link } from 'react-router-dom';
 
 import './Header.css';
@@ -10,10 +10,10 @@ const Header = () => {
 			<div className="logo">
 				<Link to="/">Simple Board</Link>
 			</div>
-			<div className="align-center">
-				<Button>
-					<Link to="login">로그인</Link>
-				</Button>
+			<div className="header-menu">
+				<Link to="/login">로그인</Link>
+				<Divider type="vertical" />
+				<Link to="/signup">회원 가입</Link>
 			</div>
 		</Layout.Header>
 	);
