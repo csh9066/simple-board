@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import AppLayout from './components/Layout/';
+import AppLayout from './components/layout/';
 
 ReactDOM.render(
 	<BrowserRouter>
