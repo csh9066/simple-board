@@ -27,9 +27,8 @@ router.post('/', async (req, res, next) => {
 		}
 
 		const existUser = await con.query('select * from member where id = ?', id);
-
-		if (existUser[0]) {
-			return res.status(400).json({
+		if (existUser[0][0]) {
+			return res.status(401).json({
 				message: '이미 사용중인 아이디입니다.',
 			});
 		}
