@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
-
-import './LoginForm.css';
 import { Link } from 'react-router-dom';
+
+import { requestLogin } from '../../../api/member';
+import './LoginForm.css';
+import MeContext from '../../../context/MeContext';
 
 const layout = {
 	labelCol: { span: 4 },
@@ -12,20 +14,40 @@ const tailLayout = {
 	wrapperCol: { offset: 4, span: 14 },
 };
 
-const LoginForm = () => {
+const LoginForm = ({ history }) => {
 	const [id, setId] = useState('');
 	const [password, setPassword] = useState('');
+	const { me, setMe } = useContext(MeContext);
+
+	useEffect(() => {
+		if (me) {
+			history.push('/');
+		}
+	}, [me, history]);
 
 	const onChangeId = (e) => {
-		setId(e.target.Value);
+		setId(e.target.value);
 	};
 
 	const onChangePassword = (e) => {
 		setPassword(e.target.value);
 	};
 
+	const onFinshLoginForm = async () => {
+		try {
+			const { payload } = await requestLogin({ id, password });
+			console.log(payload);
+			setMe({
+				id: payload.id,
+				nickname: payload.nickname,
+			});
+		} catch (e) {
+			console.log(e.response.data);
+		}
+	};
+
 	return (
-		<Form {...layout} className="login-form">
+		<Form {...layout} className="login-form" onFinish={onFinshLoginForm}>
 			<div className="ant-row">
 				<h2 className="ant-col ant-col-8 ant-col-offset-10">로그인</h2>
 			</div>
@@ -56,4 +78,5 @@ const LoginForm = () => {
 		</Form>
 	);
 };
+
 export default LoginForm;
