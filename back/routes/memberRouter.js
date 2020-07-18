@@ -43,8 +43,55 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
-router.get('/login', (req, res) => {});
+router.post('/login', async (req, res) => {
+	try {
+		const { id, password } = req.body;
+		console.log(id, password);
 
-router.get('/logout', (req, res) => {});
+		if (!id || !password) {
+			return res.status(400).json({
+				message: '잘못된 파라미터',
+			});
+		}
+
+		const [user] = await pool.query('select * from member where id = ?', id);
+
+		if (!user[0]) {
+			return res.status(401).json({
+				message: '존재하지 않는 아이디입니다',
+				status: 401,
+			});
+		}
+		const result = await bcrypt.compare(password, user[0].password);
+
+		if (result) {
+			req.session.userId = user[0].id;
+			return res.status(200).json({
+				message: '로그인 성공',
+				status: 200,
+				payload: {
+					id: user[0].id,
+					nickname: user[0].nickname,
+				},
+			});
+		}
+
+		res.status(401).json({
+			message: '비밀번호가 틀립니다',
+			status: 401,
+		});
+	} catch (e) {
+		console.log(e);
+		next(e);
+	}
+});
+
+router.post('/logout', (req, res) => {
+	req.session.destroy();
+	res.json({
+		message: '로그아웃 성공',
+		status: 200,
+	});
+});
 
 module.exports = router;
