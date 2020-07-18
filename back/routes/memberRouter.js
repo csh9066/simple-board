@@ -1,21 +1,12 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
-const dbConfig = require('../config/db')['development'];
+const pool = require('../db/pool');
 
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {
-	let con;
 	try {
-		con = await mysql.createConnection({
-			host: dbConfig.host,
-			user: dbConfig.username,
-			password: dbConfig.password,
-			database: dbConfig.database,
-		});
-
 		const { id, password, nickname } = req.body;
 
 		console.log(id, password, nickname);
@@ -26,8 +17,11 @@ router.post('/', async (req, res, next) => {
 			});
 		}
 
-		const existUser = await con.query('select * from member where id = ?', id);
-		if (existUser[0][0]) {
+		const [existUser] = await pool.query(
+			'select * from member where id = ?',
+			id
+		);
+		if (existUser[0]) {
 			return res.status(401).json({
 				message: '이미 사용중인 아이디입니다.',
 			});
@@ -35,26 +29,22 @@ router.post('/', async (req, res, next) => {
 
 		const hashPassword = await bcrypt.hash(password, 12);
 
-		const result = await con.query(
+		const [insertedUser] = await pool.query(
 			`insert into member values('${id}','${hashPassword}','${nickname}',now())`
 		);
 
-		console.log(result[0]);
+		console.log(insertedUser);
 		res.status(201).json({
 			message: 'created',
 		});
 	} catch (e) {
 		console.error(e);
 		next(e);
-	} finally {
-		if (con) {
-			con.end();
-		}
 	}
 });
 
-router.post('/login', (req, res) => {});
+router.get('/login', (req, res) => {});
 
-router.post('/logout', (req, res) => {});
+router.get('/logout', (req, res) => {});
 
 module.exports = router;
