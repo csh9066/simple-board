@@ -5,7 +5,6 @@ import { Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './AppLayout.css';
 import Header from './Header';
-import Sider from './Sider';
 import Content from './Content/';
 
 import LoginPage from '../../pages/LoginPage';
@@ -19,14 +18,11 @@ const AppLayout = () => {
 		<MeProvider>
 			<Layout className="app-layout">
 				<Header />
-				<Layout>
-					<Sider />
-					<Content>
-						<Route exact path="/" component={IndexPage} />
-						<Route path="/login" component={LoginPage} />
-						<Route path="/signup" component={SignupPage} />
-					</Content>
-				</Layout>
+				<Content>
+					<Route exact path="/" component={IndexPage} />
+					<Route path="/login" component={LoginPage} />
+					<Route path="/signup" component={SignupPage} />
+				</Content>
 			</Layout>
 		</MeProvider>
 	);
