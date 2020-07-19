@@ -1,6 +1,7 @@
 import React from 'react';
+import BoardList from '../components/board/BoardList';
 
 const IndexPage = () => {
-	return <div>홈 페이지</div>;
+	return <BoardList></BoardList>;
 };
 export default IndexPage;
