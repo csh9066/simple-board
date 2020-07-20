@@ -1,5 +1,6 @@
 .content-layout {
 	padding: 0 24px 24px;
+	min-height: auto;
 }
 
 .breadcrumb {
@@ -8,4 +9,5 @@
 
 .content {
 	background-color: white;
+	height: 100%;
 }
