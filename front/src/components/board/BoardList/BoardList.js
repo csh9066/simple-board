@@ -11,7 +11,7 @@ const columns = [
 	{
 		title: '제목',
 		dataIndex: 'title',
-		render: (text) => <Link to={text}>{text}</Link>,
+		render: ({ page, title }) => <Link to={`/board/${page}`}>{title}</Link>,
 	},
 	{
 		title: '글쓴이',
@@ -37,7 +37,7 @@ const data = Array(30)
 		return {
 			key: i,
 			id: i,
-			title: `김장김치 좋아하나요${i}`,
+			title: { page: i, title: `김장김치 좋아하나요${i}` },
 			nickname: `kimchi${i}`,
 			createdAt: '07-19',
 			comments: 0,
