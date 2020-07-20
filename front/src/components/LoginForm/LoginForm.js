@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { requestLogin } from '../../../api/member';
+import { requestLogin } from '../../api/member';
 import './LoginForm.css';
-import MeContext from '../../../context/MeContext';
+import MeContext from '../../context/MeContext';
 
 const layout = {
 	labelCol: { span: 4 },
