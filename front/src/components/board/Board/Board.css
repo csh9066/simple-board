@@ -1,0 +1,51 @@
+.flex--row {
+	display: flex;
+}
+
+.board {
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	background-color: white;
+	min-height: 600px;
+	margin-bottom: 10px;
+}
+.board__header {
+	border-bottom: 1px solid #ebecef;
+	display: flex;
+	flex-direction: column;
+	padding: 10px 0;
+}
+
+.board__header-title {
+	font-size: 26px;
+}
+
+.board__header-info {
+	display: flex;
+	justify-content: space-between;
+}
+
+.write-info {
+	margin-left: 10px;
+}
+
+.wirte-info__nickname {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.sub-info {
+	font-size: 16px;
+	align-items: center;
+}
+
+.sub-info > div {
+	margin-right: 12px;
+}
+
+.board-content {
+	padding: 10px 5px;
+	font-size: 16px;
+	line-height: 1.6;
+}
