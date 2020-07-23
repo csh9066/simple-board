@@ -22,7 +22,10 @@ const Header = () => {
 			<div className="header-menu">
 				{me ? (
 					<>
-						{me.nickname}님 환영합니다
+						<Button type="primary">
+							<Link to="/write">글쓰기</Link>
+						</Button>
+						<Divider type="vertical" />
 						<Button onClick={onClickLogout}>로그 아웃</Button>
 					</>
 				) : (

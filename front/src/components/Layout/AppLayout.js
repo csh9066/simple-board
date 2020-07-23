@@ -13,6 +13,7 @@ import SignupPage from '../../pages/SignupPage';
 
 import { MeProvider } from '../../context/MeContext';
 import BoardPage from '../../pages/BoardPage';
+import BoardWritePage from '../../pages/BoardWritePage';
 
 const AppLayout = () => {
 	return (
@@ -24,6 +25,7 @@ const AppLayout = () => {
 					<Route path="/login" component={LoginPage} />
 					<Route path="/signup" component={SignupPage} />
 					<Route path="/board/:id" component={BoardPage} />
+					<Route path="/write" component={BoardWritePage} />
 				</Content>
 			</Layout>
 		</MeProvider>
