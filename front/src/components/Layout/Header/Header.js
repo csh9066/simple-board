@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 import './Header.css';
 import MeContext from '../../../context/MeContext';
-import { requestLogout } from '../../../api/members';
+import { logoutApi } from '../../../api/members';
 
 const Header = () => {
 	const { me, setMe } = useContext(MeContext);
 
 	const onClickLogout = async () => {
-		await requestLogout();
+		await logoutApi();
 		setMe(null);
 	};
 

@@ -5,12 +5,12 @@ const axios = Axios.create({
 	withCredentials: true,
 });
 
-export const requestLogin = async (data) => {
+export const loginApi = async (data) => {
 	const resopnse = await axios.post('/login', data);
 	return resopnse.data;
 };
 
-export const requestLogout = async () => {
+export const logoutApi = async () => {
 	const response = await axios.post('/logout');
 	return response.data;
 };

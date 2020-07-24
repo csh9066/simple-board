@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { requestLogin } from '../../api/members';
+import { loginApi } from '../../api/members';
 import './LoginForm.css';
 import MeContext from '../../context/MeContext';
 
@@ -35,7 +35,7 @@ const LoginForm = ({ history }) => {
 
 	const onFinshLoginForm = async () => {
 		try {
-			const { payload } = await requestLogin({ id, password });
+			const { payload } = await loginApi({ id, password });
 			console.log(payload);
 			setMe({
 				id: payload.id,
