@@ -9,11 +9,9 @@ router.post('/', async (req, res, next) => {
 	try {
 		const { id, password, nickname } = req.body;
 
-		console.log(id, password, nickname);
-
 		if (!id || !password || !nickname) {
 			return res.status(400).json({
-				message: '잘못된 파라미터',
+				message: '입력이 안된 값이 있습니다, 값을 입력 해주세요',
 			});
 		}
 
@@ -33,9 +31,8 @@ router.post('/', async (req, res, next) => {
 			`insert into member values('${id}','${hashPassword}','${nickname}',now())`
 		);
 
-		console.log(insertedUser);
 		res.status(201).json({
-			message: 'created',
+			message: '계정 생성 완료',
 		});
 	} catch (e) {
 		console.error(e);
@@ -50,7 +47,7 @@ router.post('/login', async (req, res) => {
 
 		if (!id || !password) {
 			return res.status(400).json({
-				message: '잘못된 파라미터',
+				message: '입력이 안된 값이 있습니다, 값을 입력 해주세요',
 			});
 		}
 
@@ -59,7 +56,6 @@ router.post('/login', async (req, res) => {
 		if (!user[0]) {
 			return res.status(401).json({
 				message: '존재하지 않는 아이디입니다',
-				status: 401,
 			});
 		}
 		const result = await bcrypt.compare(password, user[0].password);
@@ -68,7 +64,6 @@ router.post('/login', async (req, res) => {
 			req.session.userId = user[0].id;
 			return res.status(200).json({
 				message: '로그인 성공',
-				status: 200,
 				payload: {
 					id: user[0].id,
 					nickname: user[0].nickname,
@@ -78,7 +73,6 @@ router.post('/login', async (req, res) => {
 
 		res.status(401).json({
 			message: '비밀번호가 틀립니다',
-			status: 401,
 		});
 	} catch (e) {
 		console.log(e);
@@ -90,7 +84,6 @@ router.post('/logout', (req, res) => {
 	req.session.destroy();
 	res.json({
 		message: '로그아웃 성공',
-		status: 200,
 	});
 });
 
