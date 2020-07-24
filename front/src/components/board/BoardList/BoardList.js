@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 
 import { Link } from 'react-router-dom';
+import { loadPostsApi } from '../../../api/posts';
 
 const columns = [
 	{
 		title: '번호',
-		dataIndex: 'id',
+		dataIndex: 'key',
 	},
 	{
 		title: '제목',
 		dataIndex: 'title',
-		render: ({ page, title }) => <Link to={`/board/${page}`}>{title}</Link>,
+		render: (text, record) => <Link to={`/board/${record.key}`}>{text}</Link>,
 	},
 	{
 		title: '글쓴이',
@@ -19,33 +20,28 @@ const columns = [
 	},
 	{
 		title: '등록일',
-		dataIndex: 'createdAt',
+		dataIndex: 'created_at',
 	},
 	{
 		title: '댓글',
-		dataIndex: 'comments',
+		dataIndex: 'comment_count',
 	},
 	{
 		title: '추천',
-		dataIndex: 'like',
+		dataIndex: 'like_count',
 	},
 ];
 
-const data = Array(30)
-	.fill(null)
-	.map((_, i) => {
-		return {
-			key: i,
-			id: i,
-			title: { page: i, title: `김장김치 좋아하나요${i}` },
-			nickname: `kimchi${i}`,
-			createdAt: '07-19',
-			comments: 0,
-			like: 0,
-		};
-	});
-
 const BoardList = () => {
+	const [data, setData] = useState(null);
+	useEffect(() => {
+		const fetchData = async () => {
+			const posts = await loadPostsApi();
+			setData(posts.payload);
+		};
+		fetchData();
+	}, []);
+
 	return (
 		<>
 			<Table columns={columns} dataSource={data}></Table>

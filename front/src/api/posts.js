@@ -9,3 +9,8 @@ export const addPostApi = async (data) => {
 	const response = await axios.post('/', data);
 	return response.data;
 };
+
+export const loadPostsApi = async () => {
+	const response = await axios.get('/');
+	return response.data;
+};
