@@ -5,7 +5,8 @@ const session = require('express-session');
 
 const app = express();
 
-const memberRouter = require('./routes/members');
+const membersRouter = require('./routes/members');
+const postsRouter = require('./routes/posts');
 
 app.use(logger('dev'));
 app.use(
@@ -27,11 +28,8 @@ app.use(
 	})
 );
 
-app.get('/', (req, res) => {
-	res.send('first');
-});
-
-app.use('/members', memberRouter);
+app.use('/members', membersRouter);
+app.use('/posts', postsRouter);
 
 app.listen(3065, () => {
 	console.log('http://localhost:3065');
