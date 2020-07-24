@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import './Header.css';
 import MeContext from '../../../context/MeContext';
-import { requestLogout } from '../../../api/member';
+import { requestLogout } from '../../../api/members';
 
 const Header = () => {
 	const { me, setMe } = useContext(MeContext);

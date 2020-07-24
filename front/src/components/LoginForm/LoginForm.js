@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { requestLogin } from '../../api/member';
+import { requestLogin } from '../../api/members';
 import './LoginForm.css';
 import MeContext from '../../context/MeContext';
 

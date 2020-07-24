@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const axios = Axios.create({
-	baseURL: 'http://localhost:3065/member/',
+	baseURL: 'http://localhost:3065/members/',
 	withCredentials: true,
 });
 
