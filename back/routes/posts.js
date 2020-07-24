@@ -1,21 +1,11 @@
 const express = require('express');
 
 const pool = require('../db/pool');
+const { isLoggedIn } = require('../routes/middlewares');
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-	console.log(req.session.userId);
-	if (!req.session.userId) {
-		res.status(403).json({
-			message: '접근 권한이 없습니다, 로그인 후 서비스를 이용해주세요',
-		});
-	} else {
-		next();
-	}
-});
-
-router.post('/', async (req, res, next) => {
+router.post('/', isLoggedIn, async (req, res, next) => {
 	try {
 		const { title, content } = req.body;
 		const { userId } = req.session;
@@ -39,6 +29,20 @@ router.post('/', async (req, res, next) => {
 	} catch (e) {
 		console.error(e);
 	}
+});
+
+router.get('/', async (req, res, next) => {
+	try {
+		const [row] = await pool.query(`
+		select id,title,content,created_at,member_id,
+			(select count(id) from board_comment where board_id = board.id ) as commentCount,
+			(select count(id) from board_like where board_id = board.id) as like_count 
+		from board 
+		order by created_at desc;
+		`);
+		console.log(row);
+		res.json({ payload: row });
+	} catch (e) {}
 });
 
 module.exports = router;
