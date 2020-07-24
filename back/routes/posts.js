@@ -34,15 +34,22 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 router.get('/', async (req, res, next) => {
 	try {
 		const [row] = await pool.query(`
-		select id,title,content,created_at,member_id,
-			(select count(id) from board_comment where board_id = board.id ) as commentCount,
-			(select count(id) from board_like where board_id = board.id) as like_count 
-		from board 
-		order by created_at desc;
+		select b.id as 'key',
+					b.title, 
+					m.nickname, 
+					date_format(b.created_at,'%y-%m-%d') created_at, 
+					b.member_id,
+				(select count(id) from board_comment where board_id = b.id ) as comment_count,
+				(select count(id) from board_like where board_id = b.id) as like_count
+		from board b
+		left join member m
+		on b.member_id = m.id
+		order by b.created_at desc;
 		`);
-		console.log(row);
 		res.json({ payload: row });
-	} catch (e) {}
+	} catch (e) {
+		console.log(e);
+	}
 });
 
 module.exports = router;
