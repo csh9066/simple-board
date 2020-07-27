@@ -52,4 +52,57 @@ router.get('/', async (req, res, next) => {
 	}
 });
 
+router.get('/:postId', async (req, res, next) => {
+	try {
+		const { postId } = req.params;
+		const [row] = await pool.query(
+			`
+		select b.id, 
+			b.title, b.content, 
+			date_format(b.created_at,'%y-%m-%d') as created_at, 
+			m.nickname,
+			(select count(id) 
+				from board_comment 
+				where 
+				board_id = ?) comments_length
+			from board b
+			left join
+        member m on
+        b.member_id = m.id
+			where b.id = ?;
+		`,
+			[postId, postId]
+		);
+		res.json({
+			payload: row[0],
+		});
+	} catch (e) {
+		console.error(e);
+	}
+});
+
+router.get('/:postId/comments', async (req, res, next) => {
+	try {
+		const { postId } = req.params;
+		const [row] = await pool.query(
+			`
+		select
+			c.id,
+			title, 
+			content, 
+      c.created_at as createdAt, 
+			nickname
+      from board_comment c
+      left join member m
+        on c.member_id = m.id
+      where c.board_id = ?; 
+		`,
+			postId
+		);
+		res.json({ payload: row });
+	} catch (e) {
+		console.error(e);
+	}
+});
+
 module.exports = router;
