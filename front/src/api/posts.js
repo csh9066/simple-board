@@ -14,3 +14,18 @@ export const loadPostsApi = async () => {
 	const response = await axios.get('/');
 	return response.data;
 };
+
+export const loadPostApi = async (postId) => {
+	const response = await axios.get(`/${postId}`);
+	return response.data;
+};
+
+export const loadCommentsApi = async (postId) => {
+	const response = await axios.get(`/${postId}/comments`);
+	return response.data;
+};
+
+export const addCommentApi = async (postId, data) => {
+	const response = await axios.post(`/${postId}/comment`, data);
+	return response.data;
+};
