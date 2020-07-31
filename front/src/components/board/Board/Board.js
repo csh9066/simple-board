@@ -1,27 +1,73 @@
-import React from 'react';
-import { Avatar, Comment, Tooltip, Form, Input, Button } from 'antd';
-import { LikeFilled, UserOutlined, CommentOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { Avatar } from 'antd';
+import { LikeFilled, CommentOutlined } from '@ant-design/icons';
 
 import './Board.css';
+import { loadPostApi, loadCommentsApi } from '../../../api/posts';
+import Comments from '../Comments/Comments';
+import CommentForm from '../CommentForm';
 
-const Board = () => {
+const Board = ({ match }) => {
+	const { id: postId } = match.params;
+	const [board, setBoard] = useState({
+		id: '',
+		title: '',
+		content: '',
+		nickname: '',
+		createdAt: '',
+		commentsLength: '',
+		commentInfo: null,
+	});
+
+	const { title, content, nickname, createdAt, commentInfo } = board;
+
+	const fectchComments = async () => {
+		const { payload } = await loadCommentsApi(postId);
+		setBoard((board) => {
+			return {
+				...board,
+				commentInfo: payload,
+			};
+		});
+	};
+
+	const fetchBoard = async () => {
+		const { payload } = await loadPostApi(postId);
+		setBoard((board) => {
+			return {
+				...board,
+				id: payload.id,
+				title: payload.title,
+				content: payload.content,
+				nickname: payload.nickname,
+				commentsLength: payload.comments_length,
+				createdAt: payload.created_at,
+			};
+		});
+	};
+
+	useEffect(() => {
+		fetchBoard();
+		fectchComments();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<div className="board">
 			<div className="board-contents">
 				<header className="board__header">
-					<h1 className="board__header-title">영어 문법 노베이스 인강</h1>
+					<h1 className="board__header-title">{title}</h1>
 					<div className="board__header-info">
 						<div className="flex--row">
 							<Avatar
 								style={{ backgroundColor: 'orange', verticalAlign: 'middle' }}
 								size="large"
 							>
-								kim
+								{nickname}
 							</Avatar>
 							<div className="write-info">
-								<div className="wirte-info__nickname">nick</div>
-								<div>2020.03.23</div>
+								<div className="wirte-info__nickname">{nickname}</div>
+								<div>{createdAt}</div>
 							</div>
 						</div>
 						<div className="board-like">
@@ -30,43 +76,20 @@ const Board = () => {
 						</div>
 					</div>
 				</header>
-				<div className="board-content"></div>
+				<div className="board-content">{content}</div>
 			</div>
 			<div className="board-comments">
 				<h2 className="board-comments-title">
 					<CommentOutlined className="comment-icon" />
-					댓글 13
+					댓글 {commentInfo && commentInfo.length}
 				</h2>
-				<Comment
-					author="kim"
-					avatar={<Avatar icon={<UserOutlined />}>Kim</Avatar>}
-					content={<p>asdasdasdsad</p>}
-					datetime={
-						<Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-							<span>{moment().fromNow()}</span>
-						</Tooltip>
-					}
-				/>
-				<Comment
-					author="hoong"
-					avatar={<Avatar icon={<UserOutlined />}>Kim</Avatar>}
-					content={<p>asdasdasdsad</p>}
-					datetime={
-						<Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-							<span>{moment().fromNow()}</span>
-						</Tooltip>
-					}
-				/>
-				<Form className="comment-form">
-					<Form.Item>
-						<Input.TextArea rows={4} placeholder="로그인을 해주세요" readOnly />
-					</Form.Item>
-					<Form.Item>
-						<Button htmlType="submit" type="primary">
-							등록
-						</Button>
-					</Form.Item>
-				</Form>
+				{commentInfo && (
+					<Comments
+						comments={commentInfo.comments}
+						fectchComments={fectchComments}
+					/>
+				)}
+				<CommentForm postId={postId} fectchComments={fectchComments} />
 			</div>
 		</div>
 	);
