@@ -60,11 +60,7 @@ router.get('/:postId', async (req, res, next) => {
 		select b.id, 
 			b.title, b.content, 
 			date_format(b.created_at,'%y-%m-%d') as created_at, 
-			m.nickname,
-			(select count(id) 
-				from board_comment 
-				where 
-				board_id = ?) comments_length
+			m.nickname
 			from board b
 			left join
         member m on
@@ -84,22 +80,30 @@ router.get('/:postId', async (req, res, next) => {
 router.get('/:postId/comments', async (req, res, next) => {
 	try {
 		const { postId } = req.params;
-		const [row] = await pool.query(
+		const [comments] = await pool.query(
 			`
 		select
 			c.id,
-			title, 
 			content, 
       c.created_at as createdAt, 
 			nickname
       from board_comment c
       left join member m
         on c.member_id = m.id
-      where c.board_id = ?; 
+			where c.board_id = ?
+			order by createdAt desc ; 
 		`,
 			postId
 		);
-		res.json({ payload: row });
+
+		const commentInfo = {
+			length: comments.length,
+			comments,
+		};
+
+		res.json({
+			payload: commentInfo,
+		});
 	} catch (e) {
 		console.error(e);
 	}
