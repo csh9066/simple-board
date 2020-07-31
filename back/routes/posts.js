@@ -109,4 +109,31 @@ router.get('/:postId/comments', async (req, res, next) => {
 	}
 });
 
+router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
+	try {
+		const { postId } = req.params;
+		const { content } = req.body;
+		const { userId } = req.session;
+		console.log(content);
+		if (!content) {
+			res.status(400).json({
+				message: '잘못된 요청입니다, 값을 입력 해주세요',
+			});
+		}
+
+		await pool.query(
+			`
+			insert into board_comment(content, created_at, member_id, board_id)
+				values(?, now(), ?, ? );
+		`,
+			[content, userId, postId]
+		);
+		res.json({
+			message: '댓글 생성 성공',
+		});
+	} catch (e) {
+		console.error(e);
+	}
+});
+
 module.exports = router;
